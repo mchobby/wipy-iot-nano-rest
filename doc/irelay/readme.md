@@ -48,7 +48,9 @@ The server will return a JSON boolean True/False value reflecting the actual sta
 
 ## Getting state of a relay
 
+```
 http://<ip>/relay/<relay_num>
+```
 
 * __ip__: the IP of your WiPy
 * __relay_num__: Number of the relay (from 1 to 4)
@@ -60,7 +62,9 @@ The server will return a JSON boolean True/False value reflecting the actual sta
 
 ## Getting state of all the relay
 
+```
 http://<ip>/relay/
+```
 
 * __ip__: the IP of your WiPy
 
@@ -75,7 +79,9 @@ The server will return a JSON structure with the state of all the relay on the b
 
 ## Halting the Rest Server
 
+```
 http://<ip>/exit
+```
 
 * __ip__: the IP of your WiPy
 
