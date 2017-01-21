@@ -31,7 +31,9 @@ The project currently support 2 differents relay board. Here the corresponding w
 
 ## Activate/Unactivate relay
 
+```
 http://<ip>/relay/<relay_num>/<state>
+```
 
 * __ip__: the IP of your WiPy
 * __relay_num__: Number of the relay (from 1 to 4)
