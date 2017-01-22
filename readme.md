@@ -29,6 +29,15 @@ Documentation will be found in the __doc__ folder. It will be sub-divised for ea
 
 Don't hesitate to read the documentation in those folders.
 
+## About regular expression
+
+Regular expression is the smartest way to match and parse URI on the nano Rest Server.
+
+Few of the developper and hacker are aware of the regular expression power. This requires some time to learn but you win 10x the benefits of your time investment.
+
+Here some ressource about RegExp:
+* [regex101.com](https://regex101.com/)<br />Online Regular Expression tester (very nice!) 
+
 # IP Address
 Using a static IP Address can really help in testing the various project.
 
