@@ -16,6 +16,7 @@ IF you copy the main-irelay.py file as __main.py__ THEN the project supports an 
 Copy the following files to your WiPy
 * lib/restsvr.py to /flash/lib/
 * lib/irelay.py to /flash/lib/
+* doc/irelay/wipy-relay.html to /flash/wipy-relay.html
 
 If you want to automagically start the Rest Server then copy (and do not forget to place GP8 on the ground)
 * doc/irelay/main-irelay.py to /flash/main.py 
@@ -182,4 +183,21 @@ Don't forget to change the IP to match your WiPy's IP address.
 >>> 
 ```
 
+# WiPy relay
+Since the the version 0.1 of the project, we have developped a small html page with angularJS. 
 
+The wipy-relay.html page is served via the root (/) request on the WiPy.
+
+The wipy-relay.html page use the angularJS framework to handle the user actions and ajax requests to the iRelay REST api described here upper. 
+
+In the picture here below, you can see the angularJS wipy-relay.html page in action. Note that we have configured our WiPy to use the fixed IP 192.168.1.220 ) 
+
+![WiPy Relay Web Interface](test-wipy-relay-html.jpg)
+
+When a button is clicked, the angularJS send an Ajax request to INVERT the relay status. Then the button updated (between red and green) with the result send back from the iRelay REST API. 
+
+We have tested this interface on Firefox and SmartPhone (under Android).
+
+Learn more about:
+ [AngularJs](https://www.w3schools.com/angular/default.asp) on w3schools.com
+ [W3.CSS (button)](https://www.w3schools.com/w3css/w3css_buttons.asp) on w3schools.com

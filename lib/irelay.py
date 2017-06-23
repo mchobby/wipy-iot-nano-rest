@@ -51,10 +51,15 @@ def relay_states( match ):
 		_d['relay%s'%k]=v
 	return _d
 
+def index_page( match ):
+	return ( 'file:html', 'wipy-relay.html' )
+    
 # Define supported action (via Regular Expression) and action_callback to call
 irelay_actions = [ ( "^\/relay\/([1-4])\/(on|off)$", update_relay),
 	( "^\/relay\/([1-4])\/$", relay_state ),
-	( "^\/relay\/$", relay_states) ]
+	( "^\/relay\/$", relay_states),
+	( "^\/$", index_page ) ]
+
 
 init_relay_gpio()
 

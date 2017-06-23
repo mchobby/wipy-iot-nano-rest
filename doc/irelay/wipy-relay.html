@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf8">
+ <title>WiPy Relays</title>
+ <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+ <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+ <style type="text/css">
+ .rcontainer {
+    background-color: None;
+ }
+ .rlabel {
+    width: 80px;
+    display: inline-block;
+    margin-left: 5px;
+ }
+ .rbutton {
+    width: 100px;
+ }
+ </style>
+</head>
+<body>
+<h1>Wipy Relays</h1>
+<div ng-app="myApp" ng-controller="myCtrl" >
+    <div class="rcontainer">
+       <span class="rlabel">Relay 1</span>
+       <span class="rbutton w3-btn w3-{{ buttons[0].color }}" ng-click="toggleBtn(0)" >{{ buttons[0].state }}</span>
+    </div>
+    <div class="rcontainer">
+       <span class="rlabel">Relay 2</span>
+       <span class="rbutton w3-btn w3-{{ buttons[1].color }}" ng-click="toggleBtn(1)" >{{ buttons[1].state }}</span>
+    </div>
+    <div class="rcontainer">
+       <span class="rlabel">Relay 3</span>
+       <span class="rbutton w3-btn w3-{{ buttons[2].color }}" ng-click="toggleBtn(2)" >{{ buttons[2].state }}</span>
+    </div>
+    <div class="rcontainer">
+       <span class="rlabel">Relay 4</span>
+       <span class="rbutton w3-btn w3-{{ buttons[3].color }}" ng-click="toggleBtn(3)" >{{ buttons[3].state }}</span>
+    </div>
+    <p>Message: {{ msg }}</p>
+    <span class="w3-btn w3-white w3-border" ng-click="refreshStates()" >Read states</span>
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope, $http) {
+    $scope.firstname = "John";
+    $scope.buttons=[{state:'off',color:'red'},{state:'off',color:'red'}, {state:'off',color:'red'}, {state:'off',color:'red'} ];
+    $scope.msg = 'None';
+         
+	$scope.toggleBtn = function( btnId ) {
+       var new_state = ($scope.buttons[btnId].state == "on" ? "off" : "on")
+       var uri = '/relay/'+(btnId+1).toString()+'/'+new_state
+
+       $scope.msg = 'Updating relay '+(btnId+1).toString()+' to '+new_state+'...'
+       $http.get( uri ).then( 
+           function(response){
+              $scope.buttons[btnId].state = (response.data == true ? "on" : "off");
+              $scope.buttons[btnId].color = (response.data == true ? "green" : "red" );
+              $scope.msg = 'Updated'
+           }
+       );
+  };
+
+  $scope.setBtn = function( btnId, b_activate ){
+       $scope.buttons[btnId].state = (b_activate == true ? "on" : "off");
+       $scope.buttons[btnId].color = (b_activate == true ? "green" : "red" );   
+  } 
+
+  $scope.refreshStates = function() {
+      $scope.msg =  'Querying states...';
+
+      $http.get( "/relay/" ).then( 
+           function(response){            
+                  //var obj = JSON.parse( response.text );
+                  $scope.setBtn( 0, response.data.relay1 );
+                  $scope.setBtn( 1, response.data.relay2 );
+                  $scope.setBtn( 2, response.data.relay3 );
+                  $scope.setBtn( 3, response.data.relay4 );
+                  $scope.msg = 'States refreshed';
+           }
+        );  
+  }
+
+  $scope.refreshStates();
+  
+});
+</script>
+
+<p>Click to change the relay status.</p>
+
+<p>This example demonstrates how to use the "<a href="https://github.com/mchobby/wipy-iot-nano-rest" target="blank">WiPy Rest Server for IOT</a>" with an angularJS Framework interface.</p>
+
+</body>
+</html>

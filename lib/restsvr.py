@@ -6,10 +6,10 @@ import ujson
 #
 # Developped by Meurisse D. for shop.mchobby.be - CC-BY-SA
 #
-# Distributed as it, without warranties
+# Distributed as it, without warranties 
 #
-
-__version__ = '0.1'
+# 2017/01/02 - send object returned by action as json dump
+# 2017/06/22 - action can also returns ('file:html', html_filename) for static html file   
 
 def send_header( conn, ErrorCode, ErrorMsg, ContentType='text/html' ):
 	conn.send( 'HTTP/1.1 ')
@@ -50,7 +50,7 @@ def rest_server( actions, debug=True ):
 			conn.sendall( "500 Internal Server Error\n" )
 			if debug:
 				conn.sendall("ValueError for Request content!\n" )
-				conn.sendall( request )			
+				conn.sendall( request )
 			conn.close()
 			continue
 		
@@ -82,12 +82,23 @@ def rest_server( actions, debug=True ):
 						if debug:
 							print( 'Match!')
 						ar = action(m) # call the action and get action result
-
-						#conn.sendall('HTTP/1.1 200 OK\nConnection: close\nServer: nanoWiPy\nContent-Type: application/json\n\n')
-						send_header( conn, '200', 'OK', ContentType='application/json')
-						conn.sendall( ujson.dumps(ar) )
-						break
-
+						# if not a tuple, just returns the object as JSON
+						# if tuple, we have ( type_string, data_value )
+						if type( ar ) != tuple: 
+							#conn.sendall('HTTP/1.1 200 OK\nConnection: close\nServer: nanoWiPy\nContent-Type: application/json\n\n')
+							send_header( conn, '200', 'OK', ContentType='application/json')
+							conn.sendall( ujson.dumps(ar) )
+							break
+						elif ar[0] == 'json': # ('json', data_object )
+							send_header( conn, '200', 'OK', ContentType='application/json')
+							conn.sendall( ujson.dumps(ar[1]) )
+						elif ar[0] == 'file:html': # ('file:html', html_filename_with_path )
+							send_header( conn, '200', 'OK', ContentType='text/html')
+							with open( ar[1], 'r' ) as html_file:
+								conn.send( html_file.read() )
+							conn.sendall('\n')
+						else:
+							raise Exception( 'Action returned unhandled %s data type' % ar[0] ) 
 				if not catch:
 					# Bad request
 					send_header( conn, 400, 'Bad request')
